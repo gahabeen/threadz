@@ -1,10 +1,11 @@
 import SharedMemory from './SharedMemory';
-import { declare, merge } from './declare';
-import ThreadzWorkerPool from './ThreadzWorkerPool';
 import { Interact } from './Interact';
-import { workerTools } from './workerTools';
-import { MaxConcurrencyOptions } from './ThreadzWorkerPool/consts';
 import { Communicate } from './Communicate';
+import ThreadzWorkerPool from './ThreadzWorkerPool';
+// import { Utility } from './Utility';
+import { workerTools } from './workerTools';
+import { declare, merge } from './declare';
+import { MaxConcurrencyOptions } from './ThreadzWorkerPool/consts';
 
 import type { SharedMemoryTransferObject } from './SharedMemory';
 
