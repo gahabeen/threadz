@@ -29,6 +29,10 @@ export class ThreadzAPI<T extends Declarations = Declarations> extends TypedEmit
      */
     readonly location: string;
     /**
+      * The import key to use when importing the worker function.
+      */
+    readonly importKey: string;
+    /**
      * The original declarations used to create the ThreadzAPI instance.
      */
     readonly declarations: T;
@@ -37,10 +41,11 @@ export class ThreadzAPI<T extends Declarations = Declarations> extends TypedEmit
      */
     readonly workers: MappedWorkers<T>;
 
-    constructor({ location, declarations }: ThreadzAPIConstructorOptions<T>) {
+    constructor({ location, declarations, importKey }: ThreadzAPIConstructorOptions<T>) {
         super();
 
         this.location = location;
+        this.importKey = importKey;
 
         const shallowCloneDeclarations = { ...declarations };
         Object.freeze(shallowCloneDeclarations);
@@ -53,7 +58,7 @@ export class ThreadzAPI<T extends Declarations = Declarations> extends TypedEmit
         const entries = Object.entries(declarations).map(([name, declaration]) => {
             const run = (...args: any[]) => {
                 if (!isMainThread) throw new MyError(ERROR_CONFIG("Can't run workers within workers!"));
-                return this.#queueWorker({ name, args, options: declaration?.options || {}, priority: declaration?.priority || false });
+                return this.#queueWorker({ name, args, options: declaration?.options || {}, priority: declaration?.priority || false, importKey: this.importKey });
             };
 
             run._name = name;
@@ -115,14 +120,16 @@ export class ThreadzAPI<T extends Declarations = Declarations> extends TypedEmit
         args,
         options,
         priority,
+        importKey = 'default'
     }: {
         name: string;
         args: any[];
         options: WorkerOptions;
         priority: boolean;
+        importKey?: string;
     }): Promise<A> {
         return new Promise((resolve, reject) => {
-            const worker = new ThreadzWorker({ priority, options, workerData: { name, args, location: this.location, type: 'REGULAR' } });
+            const worker = new ThreadzWorker({ priority, options, workerData: { name, args, location: this.location, type: 'REGULAR', importKey } });
 
             ThreadzWorkerPool.enqueue(worker);
 

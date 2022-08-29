@@ -1,5 +1,6 @@
 import { ThreadzAPI } from '../../src/ThreadzAPI/index';
 import { declare } from '../../src/declare/declare';
+import * as fixtureApi from '../fixtures/api';
 
 describe('declare', () => {
     it('Should throw an error if no declarations have been passed in.', () => {
@@ -52,5 +53,10 @@ describe('declare', () => {
         });
 
         expect(api).toBeInstanceOf(ThreadzAPI);
+    });
+
+
+    it('Should return a ThreadzAPI instance when passed as a key when exporting.', () => {
+        expect(fixtureApi.api).toBeInstanceOf(ThreadzAPI);
     });
 });

@@ -20,7 +20,7 @@ import type { Declarations } from './types.js';
  * @example export default declare({ add5: { worker: (x) => x + 5 } })
  *
  */
-export const declare = <T extends Declarations>(declarations: T, { fileLocation }: { fileLocation?: string } = {}) => {
+export const declare = <T extends Declarations>(declarations: T, { fileLocation, importKey }: { fileLocation?: string, importKey?: string } = {}) => {
     // If declarations are undefined, an array, or not an object
     const isNotObject = !declarations || Array.isArray(declarations) || typeof declarations !== 'object';
 
@@ -38,5 +38,5 @@ export const declare = <T extends Declarations>(declarations: T, { fileLocation 
 
     const location = fileLocation || (!ThreadzWorkerPool.isESM ? caller().getFileName() : callsites()[1].getFileName());
 
-    return new ThreadzAPI({ location, declarations });
+    return new ThreadzAPI({ location, declarations, importKey });
 };

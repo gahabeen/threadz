@@ -6,6 +6,7 @@ export type WorkerData = {
     args: unknown[];
     port?: MessagePort;
     type: 'BACKGROUND' | 'REGULAR';
+    importKey?: 'default' | string;
 };
 
 export type WorkerMessagePayload<T = unknown> = {

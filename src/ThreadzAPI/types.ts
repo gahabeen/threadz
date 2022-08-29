@@ -4,6 +4,7 @@ import type { DeepUnPromisify } from '../Interact/types.js';
 export type ThreadzAPIConstructorOptions<T extends Declarations> = {
     readonly location: string;
     readonly declarations: T;
+    readonly importKey?: string;
 };
 
 export interface ThreadzAPIEvents {

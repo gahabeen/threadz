@@ -9,9 +9,9 @@ import { BackgroundWorkerCallPayload, BackgroundWorkerCallResponse } from '../Ba
 
 const regular = async () => {
     try {
-        const { name, location, args } = workerData as WorkerData;
+        const { name, location, args, importKey = 'default' } = workerData as WorkerData;
 
-        const api = (await import(location)).default as ThreadzAPI<Declarations>;
+        const api = (await import(location))[importKey] as ThreadzAPI<Declarations>;
 
         if (!api || !api?.declarations) {
             throw new Error("Make sure you've made your declarations the default export of the file they're in.");
@@ -34,9 +34,9 @@ const regular = async () => {
 };
 
 const background = async () => {
-    const { location } = workerData as WorkerData;
+    const { location, importKey = 'default' } = workerData as WorkerData;
 
-    const api = (await import(location)).default as ThreadzAPI<Declarations>;
+    const api = (await import(location))[importKey] as ThreadzAPI<Declarations>;
 
     if (!api || !api?.declarations) {
         throw new Error("Make sure you've made your declarations the default export of the file they're in.");
